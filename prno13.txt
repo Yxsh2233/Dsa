@@ -1,0 +1,71 @@
+#include <iostream>
+using namespace std;
+
+const int MAX = 5;
+
+class CircularQueue {
+    int arr[MAX];
+    int front, rear;
+
+public:
+    CircularQueue() : front(0), rear(0) {}
+
+    bool isEmpty() {
+        return front == rear;
+    }
+
+    bool isFull() {
+        return (rear + 1) % MAX == front;
+    }
+
+    void enqueue(int data) {
+        if (isFull()) {
+            cout << "Queue is full.\n";
+            return;
+        }
+        arr[rear] = data;
+        rear = (rear + 1) % MAX;
+    }
+
+    int dequeue() {
+        if (isEmpty()) {
+            cout << "Queue is empty.\n";
+            return -1;
+        }
+        int data = arr[front];
+        front = (front + 1) % MAX;
+        return data;
+    }
+
+    void display() {
+        if (isEmpty()) {
+            cout << "Queue is empty.\n";
+            return;
+        }
+        int temp = front;
+        do {
+            cout << arr[temp] << " ";
+            temp = (temp + 1) % MAX;
+        } while (temp != rear);
+        cout << endl;
+    }
+};
+
+int main() {
+    CircularQueue q;
+    q.enqueue(1);
+    q.enqueue(2);
+    q.enqueue(3);
+    q.enqueue(4);
+    q.enqueue(5);
+
+    cout << "Queue elements: ";
+    q.display();
+
+    cout << "Dequeued element: " << q.dequeue() << endl;
+
+    cout << "Queue elements after dequeue: ";
+    q.display();
+
+    return 0;
+}
