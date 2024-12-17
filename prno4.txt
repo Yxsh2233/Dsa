@@ -1,0 +1,58 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left, *right;
+};
+
+Node* createNode(int data) {
+    Node* newNode = new Node();
+    newNode->data = data;
+    newNode->left = newNode->right = nullptr;
+    return newNode;
+}
+
+Node* insert(Node* root, int data) {
+    if (root == nullptr) return createNode(data);
+    if (data < root->data) root->left = insert(root->left, data);
+    else root->right = insert(root->right, data);
+    return root;
+}
+
+void mirror(Node* root) {
+    if (root == nullptr) return;
+    swap(root->left, root->right);
+    mirror(root->left);
+    mirror(root->right);
+}
+
+void inorder(Node* root) {
+    if (root == nullptr) return;
+    inorder(root->left);
+    cout << root->data << " ";
+    inorder(root->right);
+}
+
+int main() {
+    Node* root = nullptr;
+    root = insert(root, 5);
+    root = insert(root, 3);
+    root = insert(root, 7);
+    root = insert(root, 2);
+    root = insert(root, 4);
+    root = insert(root, 6);
+    root = insert(root, 8);
+
+    cout << "Original Tree: ";
+    inorder(root);
+    cout << endl;
+
+    mirror(root);
+
+    cout << "Mirror Image: ";
+    inorder(root);
+    cout << endl;
+
+    return 0;
+}
