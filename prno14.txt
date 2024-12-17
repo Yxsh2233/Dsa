@@ -1,0 +1,92 @@
+#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+struct Node {
+    char data;
+    Node* left, *right;
+};
+
+Node* newNode(char data) {
+    Node* node = new Node();
+    node->data = data;
+    node->left = node->right = nullptr;
+    return node;
+}
+
+Node* constructPostfix(string postfix) {
+    stack<Node*> st;
+    for (char c : postfix) {
+        if (c >= 'a' && c <= 'z') {
+            Node* node = newNode(c);
+            st.push(node);
+        } else {
+            Node* right = st.top();
+            st.pop();
+            Node* left = st.top();
+            st.pop();
+            Node* node = newNode(c);
+            node->left = left;
+            node->right = right;
+            st.push(node);
+        }
+    }
+    return st.top();
+}
+
+Node* constructPrefix(string prefix) {
+    stack<Node*> st;
+    for (int i = prefix.length() - 1; i >= 0; --i) {
+        char c = prefix[i];
+        if (c >= 'a' && c <= 'z') {
+            Node* node = newNode(c);
+            st.push(node);
+        } else {
+            Node* left = st.top();
+            st.pop();
+            Node* right = st.top();
+            st.pop();
+            Node* node = newNode(c);
+            node->left = left;
+            node->right = right;
+            st.push(node);
+        }
+    }
+    return st.top();
+}
+
+void postOrder(Node* root) {
+    if (root == nullptr) return;
+    stack<Node*> st1, st2;
+    st1.push(root);
+    while (!st1.empty()) {
+        Node* node = st1.top();
+        st1.pop();
+        st2.push(node);
+        if (node->left) st1.push(node->left);
+        if (node->right) st1.push(node->right);
+    }
+    while (!st2.empty()) {
+        Node* node = st2.top();
+        st2.pop();
+        cout << node->data << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    string postfix = "abc*+";
+    string prefix = "+a*bc";
+
+    Node* postfixRoot = constructPostfix(postfix);
+    Node* prefixRoot = constructPrefix(prefix);
+
+    cout << "Postfix expression: ";
+    postOrder(postfixRoot);
+
+    cout << "Prefix expression: ";
+    postOrder(prefixRoot);
+
+    return 0;
+}
