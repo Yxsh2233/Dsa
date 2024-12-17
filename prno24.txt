@@ -1,0 +1,91 @@
+#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+struct Node {
+    char data;
+    Node* left;
+    Node* right;
+};
+
+Node* createNode(char data) {
+    Node* newNode = new Node();
+    newNode->data = data;
+    newNode->left = newNode->right = nullptr;
+    return newNode;
+}
+
+Node* constructPostfix(string postfix) {
+    stack<Node*> st;
+    for (char c : postfix) {
+        if (c >= 'a' && c <= 'z') {
+            Node* newNode = createNode(c);
+            st.push(newNode);
+        } else {
+            Node* right = st.top();
+            st.pop();
+            Node* left = st.top();
+            st.pop();
+            Node* newNode = createNode(c);
+            newNode->left = left;
+            newNode->right = right;
+            st.push(newNode);
+        }
+    }
+    return st.top();
+}
+
+Node* constructPrefix(string prefix) {
+    stack<Node*> st;
+    for (int i = prefix.size() - 1; i >= 0; i--) {
+        char c = prefix[i];
+        if (c >= 'a' && c <= 'z') {
+            Node* newNode = createNode(c);
+            st.push(newNode);
+        } else {
+            Node* left = st.top();
+            st.pop();
+            Node* right = st.top();
+            st.pop();
+            Node* newNode = createNode(c);
+            newNode->left = left;
+            newNode->right = right;
+            st.push(newNode);
+        }
+    }
+    return st.top();
+}
+
+void nonRecursiveInorder(Node* root) {
+    stack<Node*> st;
+    Node* current = root;
+    while (current != nullptr || !st.empty()) {
+        while (current != nullptr) {
+            st.push(current);
+            current = current->left;
+        }
+        current = st.top();
+        st.pop();
+        cout << current->data << " ";
+        current = current->right;
+    }
+}
+
+int main() {
+    string postfix = "ab+c*";
+    Node* postfixRoot = constructPostfix(postfix);
+    cout << "Postfix Expression: " << postfix << endl;
+    cout << "Non-recursive In-order Traversal: ";
+    nonRecursiveInorder(postfixRoot);
+    cout << endl;
+
+    string prefix = "*+ab*c";
+    Node* prefixRoot = constructPrefix(prefix);
+    cout << "Prefix Expression: " << prefix << endl;
+    cout << "Non-recursive In-order Traversal: ";
+    nonRecursiveInorder(prefixRoot);
+    cout << endl;
+
+    return 0;
+}
