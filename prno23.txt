@@ -1,0 +1,59 @@
+#include <iostream>
+using namespace std;
+
+struct Student {
+    string name;
+    float sgpa;
+};
+
+void bubbleSort(Student arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j].sgpa < arr[j + 1].sgpa) {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+
+void searchStudents(Student arr[], int n, float sgpa) {
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        if (arr[i].sgpa == sgpa) {
+            count++;
+        }
+    }
+
+    if (count == 0) {
+        cout << "No student found with SGPA " << sgpa << endl;
+    } else {
+        cout << "Students with SGPA " << sgpa << ":" << endl;
+        for (int i = 0; i < n; i++) {
+            if (arr[i].sgpa == sgpa) {
+                cout << "Name: " << arr[i].name << ", SGPA: " << arr[i].sgpa << endl;
+            }
+        }
+    }
+}
+
+int main() {
+    int n;
+    cout << "Enter number of students: ";
+    cin >> n;
+
+    Student arr[n];
+    for (int i = 0; i < n; i++) {
+        cout << "Enter name and SGPA of student " << i + 1 << ": ";
+        cin >> arr[i].name >> arr[i].sgpa;
+    }
+
+    bubbleSort(arr, n);
+
+    float sgpa;
+    cout << "Enter SGPA to search students: ";
+    cin >> sgpa;
+
+    searchStudents(arr, n, sgpa);
+
+    return 0;
+}
