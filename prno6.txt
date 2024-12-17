@@ -1,0 +1,39 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left, *right;
+};
+
+void inOrder(Node* root) {
+    while (root) {
+        if (root->left) root = root->left;
+        else {
+            cout << root->data << " ";
+            root = root->right;
+        }
+    }
+}
+
+void preOrder(Node* root) {
+    while (root) {
+        cout << root->data << " ";
+        if (root->left) root = root->left;
+        else root = root->right;
+    }
+}
+
+int main() {
+    Node* root = new Node{10};
+    root->left = new Node{5};
+    root->right = new Node{20};
+    root->left->left = new Node{3};
+    root->left->right = new Node{7};
+    root->right->left = new Node{15};
+
+    cout << "In-order: ";
+    inOrder(root);
+    cout << "\nPre-order: ";
+    preOrder(root);
+}
