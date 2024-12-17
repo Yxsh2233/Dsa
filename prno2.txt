@@ -1,0 +1,48 @@
+#include <iostream>
+using namespace std;
+
+const int MAX = 5;
+
+class CircularQueue {
+    int arr[MAX];
+    int front, rear;
+
+public:
+    CircularQueue() {
+        front = rear = -1;
+    }
+
+    void enqueue(int data) {
+        if ((rear + 1) % MAX == front) {
+            cout << "Queue is full.\n";
+            return;
+        }
+        if (front == -1) front = 0;
+        rear = (rear + 1) % MAX;
+        arr[rear] = data;
+    }
+
+    void display() {
+        if (front == -1) {
+            cout << "Queue is empty.\n";
+            return;
+        }
+        int temp = front;
+        while (temp != rear) {
+            cout << arr[temp] << " ";
+            temp = (temp + 1) % MAX;
+        }
+        cout << arr[rear] << endl;
+    }
+};
+
+int main() {
+    CircularQueue q;
+    q.enqueue(1);
+    q.enqueue(2);
+    q.enqueue(3);
+    q.enqueue(4);
+    q.enqueue(5);
+    q.display();  // Output: 1 2 3 4 5
+    return 0;
+}
