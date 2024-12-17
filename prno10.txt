@@ -1,0 +1,26 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+struct Student {
+	int roll;
+	char name[50];
+};
+
+int main() {
+	ofstream file("student.dat",ios::app);
+	Student s;
+	char choice;
+	
+	do {
+		cout << "Enter roll number & name: ";
+		cin >> s.roll >> s.name;
+		file.write((char*)&s,sizeof(s));
+		cout << "Add more? (y/n):";
+		cin >> choice;
+	} while (choice == 'y');
+	
+	file.close();
+	return 0;
+}
