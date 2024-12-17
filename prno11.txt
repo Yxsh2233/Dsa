@@ -1,0 +1,35 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+    string name;
+    int roll_number;
+};
+
+void insertion_sort(Student students[], int n) {
+    for (int i = 1; i < n; i++) {
+        Student key = students[i];
+        int j = i - 1;
+        while (j >= 0 && students[j].name > key.name) {
+            students[j + 1] = students[j];
+            j--;
+        }
+        students[j + 1] = key;
+    }
+}
+
+int main() {
+    Student students[] = {{"John", 1}, {"Alice", 2}, {"Bob", 3}, {"Eve", 4}, {"Charlie", 5}};
+    int n = sizeof(students) / sizeof(students[0]);
+
+    cout << "Before Sorting:\n";
+    for (auto& s : students) cout << "Name: " << s.name << ", Roll Number: " << s.roll_number << "\n";
+
+    insertion_sort(students, n);
+
+    cout << "\nAfter Sorting:\n";
+    for (auto& s : students) cout << "Name: " << s.name << ", Roll Number: " << s.roll_number << "\n";
+
+    return 0;
+}
