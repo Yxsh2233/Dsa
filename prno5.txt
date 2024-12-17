@@ -1,0 +1,62 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Stack {
+    struct Node {
+        char data;
+        Node* next;
+    };
+    Node* top;
+
+public:
+    Stack() : top(nullptr) {}
+
+    void push(char c) {
+        Node* newNode = new Node();
+        newNode->data = c;
+        newNode->next = top;
+        top = newNode;
+    }
+
+    char pop() {
+        if (top == nullptr) return '\0';
+        char data = top->data;
+        Node* temp = top;
+        top = top->next;
+        delete temp;
+        return data;
+    }
+
+    char getTop() {
+        return top->data;
+    }
+
+    bool isEmpty() {
+        return top == nullptr;
+    }
+};
+
+string postfixToPrefix(string postfix) {
+    Stack s;
+    for (char c : postfix) {
+        if (c == ' ') continue;
+        if (c >= 'a' && c <= 'z') s.push(c);
+        else {
+            string op2(1, s.pop());
+            string op1(1, s.pop());
+            string prefix = c + op1 + op2;
+            for (char ch : prefix) s.push(ch);
+        }
+    }
+    string prefix;
+    while (!s.isEmpty()) prefix = s.pop() + prefix;
+    return prefix;
+}
+
+int main() {
+    string postfix = "a b + c d + *";
+    string prefix = postfixToPrefix(postfix);
+    cout << "Prefix Expression: " << prefix << endl;
+    return 0;
+}
