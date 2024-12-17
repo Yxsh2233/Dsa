@@ -1,0 +1,73 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Stack {
+    struct Node {
+        char data;
+        Node* next;
+    };
+    Node* top;
+
+public:
+    Stack() : top(nullptr) {}
+
+    void push(char c) {
+        Node* newNode = new Node();
+        newNode->data = c;
+        newNode->next = top;
+        top = newNode;
+    }
+
+    char pop() {
+        if (top == nullptr) return '\0';
+        char data = top->data;
+        Node* temp = top;
+        top = top->next;
+        delete temp;
+        return data;
+    }
+
+    char getTop() {
+        return top->data;
+    }
+
+    bool isEmpty() {
+        return top == nullptr;
+    }
+};
+
+string infixToPrefix(string infix) {
+    Stack s;
+    string prefix;
+
+    for (int i = infix.length() - 1; i >= 0; --i) {
+        char c = infix[i];
+
+        if (c == ' ') continue;
+
+        if (c >= 'a' && c <= 'z') {
+            prefix = c + prefix;
+        } else {
+            while (!s.isEmpty() && s.getTop() != '(' && s.getTop() > c) {
+                prefix = s.pop() + prefix;
+            }
+            s.push(c);
+        }
+    }
+
+    while (!s.isEmpty()) {
+        prefix = s.pop() + prefix;
+    }
+
+    return prefix;
+}
+
+int main() {
+    string infix = "a+b*c";
+    string prefix = infixToPrefix(infix);
+
+    cout << "Prefix Expression: " << prefix << endl;
+
+    return 0;
+}
