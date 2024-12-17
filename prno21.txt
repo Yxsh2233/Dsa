@@ -1,0 +1,83 @@
+#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+struct Node {
+    char data;
+    Node* left;
+    Node* right;
+};
+
+Node* createNode(char data) {
+    Node* newNode = new Node();
+    newNode->data = data;
+    newNode->left = newNode->right = nullptr;
+    return newNode;
+}
+
+Node* constructPostfix(string postfix) {
+    stack<Node*> st;
+    for (char c : postfix) {
+        if (c >= 'a' && c <= 'z') {
+            Node* newNode = createNode(c);
+            st.push(newNode);
+        } else {
+            Node* right = st.top();
+            st.pop();
+            Node* left = st.top();
+            st.pop();
+            Node* newNode = createNode(c);
+            newNode->left = left;
+            newNode->right = right;
+            st.push(newNode);
+        }
+    }
+    return st.top();
+}
+
+Node* constructPrefix(string prefix) {
+    stack<Node*> st;
+    for (int i = prefix.size() - 1; i >= 0; i--) {
+        char c = prefix[i];
+        if (c >= 'a' && c <= 'z') {
+            Node* newNode = createNode(c);
+            st.push(newNode);
+        } else {
+            Node* left = st.top();
+            st.pop();
+            Node* right = st.top();
+            st.pop();
+            Node* newNode = createNode(c);
+            newNode->left = left;
+            newNode->right = right;
+            st.push(newNode);
+        }
+    }
+    return st.top();
+}
+
+void inOrderTraversal(Node* root) {
+    if (root == nullptr) return;
+    inOrderTraversal(root->left);
+    cout << root->data << " ";
+    inOrderTraversal(root->right);
+}
+
+int main() {
+    string postfix = "ab+c*";
+    Node* postfixRoot = constructPostfix(postfix);
+    cout << "Postfix Expression: " << postfix << endl;
+    cout << "In-order Traversal: ";
+    inOrderTraversal(postfixRoot);
+    cout << endl;
+
+    string prefix = "*+ab*c";
+    Node* prefixRoot = constructPrefix(prefix);
+    cout << "Prefix Expression: " << prefix << endl;
+    cout << "In-order Traversal: ";
+    inOrderTraversal(prefixRoot);
+    cout << endl;
+
+    return 0;
+}
