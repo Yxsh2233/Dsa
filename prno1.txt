@@ -1,0 +1,34 @@
+#include <iostream>
+using namespace std;
+
+struct Student {
+    int roll;
+    string name;
+};
+
+void bubbleSort(Student arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j].roll > arr[j + 1].roll) {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+
+void printList(Student arr[], int n) {
+    cout << "Roll Call List:\n";
+    for (int i = 0; i < n; i++) {
+        cout << arr[i].roll << " " << arr[i].name << endl;
+    }
+}
+
+int main() {
+    int n = 5;
+    Student arr[n] = {{5, "John"}, {2, "Alice"}, {4, "Bob"}, {1, "Charlie"}, {3, "David"}};
+
+    bubbleSort(arr, n);
+    printList(arr, n);
+
+    return 0;
+}
