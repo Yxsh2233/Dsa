@@ -1,0 +1,80 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Node {
+    char data;
+    Node* next;
+};
+
+class Stack {
+public:
+    Node* top;
+
+    Stack() : top(nullptr) {}
+
+    void push(char c) {
+        Node* newNode = new Node();
+        newNode->data = c;
+        newNode->next = top;
+        top = newNode;
+    }
+
+    char pop() {
+        if (top == nullptr) return '\0';
+        char data = top->data;
+        Node* temp = top;
+        top = top->next;
+        delete temp;
+        return data;
+    }
+
+    char getTop() {
+        return top->data;
+    }
+
+    bool isEmpty() {
+        return top == nullptr;
+    }
+};
+
+string infixToPostfix(string infix) {
+    Stack s;
+    string postfix;
+
+    for (char c : infix) {
+        if (c == ' ') continue;
+
+        if (c >= 'a' && c <= 'z') {
+            postfix += c;
+        } else if (c == '(') {
+            s.push(c);
+        } else if (c == ')') {
+            while (s.getTop() != '(') {
+                postfix += s.pop();
+            }
+            s.pop();
+        } else {
+            while (!s.isEmpty() && s.getTop() != '(' && s.getTop() > c) {
+                postfix += s.pop();
+            }
+            s.push(c);
+        }
+    }
+
+    while (!s.isEmpty()) {
+        postfix += s.pop();
+    }
+
+    return postfix;
+}
+
+int main() {
+    string infix = "a+b*c";
+    string postfix = infixToPostfix(infix);
+
+    cout << "Infix expression: " << infix << endl;
+    cout << "Postfix expression: " << postfix << endl;
+
+    return 0;
+}
